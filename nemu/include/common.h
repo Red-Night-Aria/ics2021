@@ -31,4 +31,8 @@ typedef uint16_t ioaddr_t;
 
 #include <debug.h>
 
+
+// Custom
+#define WORD_SIZE MUXDEF(CONFIG_ISA64, 8, 4)
+ 
 #endif

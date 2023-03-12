@@ -9,8 +9,22 @@ const char *regs[] = {
 };
 
 void isa_reg_display() {
+  printf("pc: " FMT_WORD "\n", cpu.pc);
+  for (int i = 0; i < ARRLEN(regs); ++i) {
+    printf("%s:\t" FMT_WORD "\n", regs[i], cpu.gpr[i]._32);
+  }
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
+  *success = true;
+  for (int i = 0; i < ARRLEN(regs); ++i) {
+    if (regs[i][0] != '$' && strcmp(s + 1, regs[i]) == 0) {
+      return cpu.gpr[i]._32;
+    }
+    if (regs[i][0] == '$' && strcmp(s, regs[i]) == 0) {
+      return cpu.gpr[i]._32;
+    }
+  }
+  *success = false;
   return 0;
 }
