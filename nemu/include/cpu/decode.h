@@ -9,7 +9,7 @@ typedef struct {
     IFDEF(CONFIG_ISA_x86, uint64_t fval);
     rtlreg_t *preg;
     word_t imm;
-    sword_t simm;
+    word_t simm;
   };
   IFDEF(CONFIG_ISA_x86, rtlreg_t val);
   IFDEF(CONFIG_ISA_x86, uint8_t type);

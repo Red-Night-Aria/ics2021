@@ -30,6 +30,8 @@ void  *malloc    (size_t size);
 void   free      (void *ptr);
 int    abs       (int x);
 int    atoi      (const char *nptr);
+void   int2str   (int32_t num, char *str);
+size_t max(size_t l, size_t r);
 
 // stdio.h
 int    printf    (const char *format, ...);

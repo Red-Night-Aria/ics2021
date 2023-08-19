@@ -19,6 +19,10 @@ int abs(int x) {
   return (x < 0 ? -x : x);
 }
 
+size_t max(size_t l, size_t r) {
+  return l < r ? r : l;
+}
+
 int atoi(const char* nptr) {
   int x = 0;
   while (*nptr == ' ') { nptr ++; }
@@ -27,6 +31,23 @@ int atoi(const char* nptr) {
     nptr ++;
   }
   return x;
+}
+
+void int2str(int32_t num, char *str) {
+  int i = 0, j = 0;
+  char tmp[20];
+  if (num < 0) {
+      str[j++] = '-';
+      num = -num;
+  }
+  do {
+      tmp[i++] = num % 10 + '0';
+      num /= 10;
+  } while (num);
+  while (i > 0) {
+      str[j++] = tmp[--i];
+  }
+  str[j] = '\0';
 }
 
 void *malloc(size_t size) {
