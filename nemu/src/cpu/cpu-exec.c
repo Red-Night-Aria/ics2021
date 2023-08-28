@@ -21,10 +21,13 @@ rtlreg_t tmp_reg[4];
 void device_update();
 void fetch_decode(Decode *s, vaddr_t pc);
 bool check_if_watchpoint_change();
+void WriteToRingBuf(char* content);
+void FlushRingBuf();
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
-  if (ITRACE_COND) log_write("%s\n", _this->logbuf);
+  // if (ITRACE_COND) log_write("%s\n", _this->logbuf);
+  WriteToRingBuf(_this->logbuf);
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
@@ -107,8 +110,8 @@ void cpu_exec(uint64_t n) {
     fetch_decode_exec_updatepc(&s);
     g_nr_guest_instr ++;
     trace_and_difftest(&s, cpu.pc);
-    if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
+    if (nemu_state.state != NEMU_RUNNING) break;
   }
 
   uint64_t timer_end = get_time();
@@ -118,6 +121,7 @@ void cpu_exec(uint64_t n) {
     case NEMU_RUNNING: nemu_state.state = NEMU_STOP; break;
 
     case NEMU_END: case NEMU_ABORT:
+      FlushRingBuf();
       Log("nemu: %s at pc = " FMT_WORD,
           (nemu_state.state == NEMU_ABORT ? ASNI_FMT("ABORT", ASNI_FG_RED) :
            (nemu_state.halt_ret == 0 ? ASNI_FMT("HIT GOOD TRAP", ASNI_FG_GREEN) :

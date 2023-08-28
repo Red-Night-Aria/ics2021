@@ -144,13 +144,18 @@ config ITRACE_COND
   string "Only trace instructions when the condition is true"
   default "true"
 
+config TRACE_DEVICE
+  depends on TRACE
+  bool "Enable device trace"
+  default n
+
 config DEBUG_EXPR
   bool "Enable debug expr function"
   default n
 
 config ENABLE_WATCHPOINT
   bool "Enable watchpoint"
-  default y
+  default n
 
 config DIFFTEST
   depends on TARGET_NATIVE_ELF
