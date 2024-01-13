@@ -22,6 +22,26 @@ static def_DopHelper(r) {
   op->preg = (is_write && val == 0) ? &zero_null : &gpr(val);
 }
 
+static def_DopHelper(csr) {
+  switch (val) {
+  case 0x300:
+    op->preg = &(cpu.mstatus);
+    break;
+  case 0x305:
+    op->preg = &(cpu.mtvec);
+    break;
+  case 0x341:
+    op->preg = &(cpu.mepc);
+    break;
+  case 0x342:
+    op->preg = &(cpu.mcause);
+    break;
+  default:
+    panic("Unknown csr number: %x", val);
+    break;
+  }
+}
+
 // Decode helper
 // How to decode a certain basic type
 static def_DHelper(I) {
@@ -61,6 +81,12 @@ static def_DHelper(B) {
   decode_op_i(s, id_dest, simm, false);
   decode_op_r(s, id_src1, s->isa.instr.b.rs1, false);
   decode_op_r(s, id_src2, s->isa.instr.b.rs2, false);
+}
+
+static def_DHelper(CSR) {
+  decode_op_csr(s, id_src1, s->isa.instr.i.simm11_0, true);
+  decode_op_r(s, id_src2, s->isa.instr.i.rs1, false);
+  decode_op_r(s, id_dest, s->isa.instr.i.rd, true);
 }
 
 // THelper: table lookup helper
@@ -126,6 +152,12 @@ def_THelper(branch_jump) {
   return EXEC_ID_inv;
 }
 
+def_THelper(csr) {
+  def_INSTR_TAB("??????? ????? ????? 001 ????? ????? ??", csrrw);
+  def_INSTR_TAB("??????? ????? ????? 010 ????? ????? ??", csrrs);
+  return EXEC_ID_inv;
+}
+
 // First lookup table
 // The instruction to decoded is which basic type?
 def_THelper(main) {
@@ -139,6 +171,9 @@ def_THelper(main) {
   def_INSTR_IDTAB("??????? ????? ????? ??? ????? 01100 11", R     , rr_compute);
   def_INSTR_IDTAB("??????? ????? ????? ??? ????? 11000 11", B     , branch_jump);
   def_INSTR_TAB  ("??????? ????? ????? ??? ????? 11010 11",         nemu_trap);
+  def_INSTR_TAB  ("0000000 ????? ????? 000 ????? 11100 11",         ecall);
+  def_INSTR_TAB  ("0011000 00010 ????? 000 ????? 11100 11",         mret);
+  def_INSTR_IDTAB("??????? ????? ????? ??? ????? 11100 11", CSR     , csr);
   return table_inv(s);
 };
 

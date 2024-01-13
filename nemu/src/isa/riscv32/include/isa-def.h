@@ -9,6 +9,10 @@ typedef struct {
   } gpr[32];
 
   vaddr_t pc;
+  rtlreg_t mepc;
+  rtlreg_t mstatus;
+  rtlreg_t mcause;
+  rtlreg_t mtvec;
 } riscv32_CPU_state;
 
 // decode
@@ -63,7 +67,6 @@ typedef struct {
       uint32_t imm10_5   : 6;
       int32_t  imm12     : 1;
     } b;
-    
     uint32_t val;
   } instr;
 } riscv32_ISADecodeInfo;
