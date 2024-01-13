@@ -18,21 +18,11 @@ int printf(const char *fmt, ...) {
   return ret_code;
 }
 
-char ToHex(int d) {
-  panic_on(d >= 16, "Error parameter for ToHex.");
-  if (d < 10) {
-    return '0' + d;
-  } else {
-    return 'a' + d - 10;
-  }
-}
-
 int vsprintf(char *out, const char *fmt, va_list ap) {
   int d;
   char* s;
   char* str_beg = out;
   char c;
-  ptrsize_t p;
   for (int i = 0; i < strlen(fmt);) {
     if (fmt[i] != '%') {
       *out = fmt[i];
@@ -53,19 +43,6 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         c = va_arg(ap, int);
         *out = c;
         out = out + 1;
-        break;
-      case 'p':
-        p = va_arg(ap, ptrsize_t);
-        char buffer[PTRSIZE / 4 + 3];
-        buffer[0] = '0';
-        buffer[1] = 'x';
-        buffer[PTRSIZE / 4 + 2] = '\0';
-        for (int j = PTRSIZE / 4 + 1; j > 1; --j) {
-          buffer[j] = ToHex(p % 16);
-          p /= 16;
-        }
-        strcpy(out, buffer);
-        out = out + strlen(buffer);
         break;
       default:
         putch(fmt[i+1]);
