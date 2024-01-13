@@ -8,7 +8,6 @@ f(beq) f(bne) f(blt) f(bge) f(bltu) f(bgeu) \
 f(xor) f(or) f(and) \
 f(lh) f(lb) f(sh) f(sb) f(lbu) f(lhu) \
 f(slli) f(srli) f(srai) f(sll) f(srl) f(sra) \
-f(mul) f(mulh) f(mulhu) f(div) f(divu) f(rem) f(remu) \
-f(csrrw) f(csrrs) f(ecall) f(mret)
+f(mul) f(mulh) f(mulhu) f(div) f(divu) f(rem) f(remu)
 
 def_all_EXEC_ID();
