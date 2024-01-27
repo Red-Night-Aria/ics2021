@@ -48,6 +48,7 @@ endif
 ### Create the destination directory (`build/$ARCH`)
 WORK_DIR  = $(shell pwd)
 DST_DIR   = $(WORK_DIR)/build/$(ARCH)
+$(info DST_DIR: $(DST_DIR))
 $(shell mkdir -p $(DST_DIR))
 
 ### Compilation targets (a binary image or archive)
@@ -57,11 +58,15 @@ ARCHIVE   = $(WORK_DIR)/build/$(NAME)-$(ARCH).a
 
 ### Collect the files to be linked: object files (`.o`) and libraries (`.a`)
 OBJS      = $(addprefix $(DST_DIR)/, $(addsuffix .o, $(basename $(SRCS))))
+#$(info libs_prev: $(LIBS))
 LIBS     := $(sort $(LIBS) am klib) # lazy evaluation ("=") causes infinite recursions
+#$(info libs_after: $(LIBS))
 LINKAGE   = $(OBJS) \
   $(addsuffix -$(ARCH).a, $(join \
     $(addsuffix /build/, $(addprefix $(AM_HOME)/, $(LIBS))), \
     $(LIBS) ))
+
+#$(info linkage: $(LINKAGE))
 
 ## 3. General Compilation Flags
 

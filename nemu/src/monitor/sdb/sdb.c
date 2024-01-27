@@ -138,6 +138,19 @@ static int cmd_d(char* args) {
   return 0;
 }
 
+uint32_t g_bp_addr = 0;  // breakpoint
+
+static int cmd_b(char* args) {
+  char *end_ptr;
+  uint32_t n = strtoul(args, &end_ptr, 0);
+  if (end_ptr == args) {
+    printf("Parse string to number fail: %s\n", args);
+  } else {
+    g_bp_addr = n;
+  }
+  return 0;
+}
+
 static struct {
   const char *name;
   const char *description;
@@ -152,6 +165,7 @@ static struct {
   { "p", "Caculate expression", cmd_p},
   { "w", "Set watch point", cmd_w},
   { "d", "Delete watch point", cmd_d},
+  { "b", "Set break point", cmd_b},
 };
 
 #define NR_CMD ARRLEN(cmd_table)

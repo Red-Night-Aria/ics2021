@@ -1,10 +1,10 @@
 #include <isa.h>
 
+void isa_reg_display();
+
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
-  /* TODO: Trigger an interrupt/exception with ``NO''.
-   * Then return the address of the interrupt/exception vector.
-   */
-  // panic("%d %x\n", NO, NO);
+  // Log("NO: %d", NO);
+  // isa_reg_display();
   cpu.mcause = NO;
   cpu.mepc = epc;
   return cpu.mtvec;

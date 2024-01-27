@@ -93,6 +93,7 @@ void fetch_decode(Decode *s, vaddr_t pc) {
 #endif
 }
 
+extern uint32_t g_bp_addr;
 /* Simulate how the CPU works. */
 void cpu_exec(uint64_t n) {
   g_print_step = (n < MAX_INSTR_TO_PRINT);
@@ -112,6 +113,9 @@ void cpu_exec(uint64_t n) {
     trace_and_difftest(&s, cpu.pc);
     IFDEF(CONFIG_DEVICE, device_update());
     if (nemu_state.state != NEMU_RUNNING) break;
+    if (g_bp_addr != 0 && cpu.pc == g_bp_addr) {
+      break;
+    }
   }
 
   uint64_t timer_end = get_time();

@@ -5,12 +5,18 @@
 static Context* (*user_handler)(Event, Context*) = NULL;
 
 Context* __am_irq_handle(Context *c) {
-  printf("mcause: %d, mstatus: %p, mepc: %p\n", c->mcause, c->mstatus, c->mepc);
+  // printf("mcause: %d, mstatus: %p, mepc: %p\n", c->mcause, c->mstatus, c->mepc);
+  // ATTENDTION: PC is already added in NEMU
   if (user_handler) {
     Event ev = {0};
     switch (c->mcause) {
       case -1: ev.event = EVENT_YIELD; break;
-      default: ev.event = EVENT_ERROR; break;
+      case 0:  
+      case 1:
+      case 4:
+        ev.event = EVENT_SYSCALL;
+        break;
+      default: ev.event = EVENT_ERROR; break;  
     }
 
     c = user_handler(ev, c);
