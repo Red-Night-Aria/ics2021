@@ -62,6 +62,9 @@ int    vsnprintf (char *str, size_t size, const char *format, va_list ap);
     } while (0)
 #endif
 
+// helper marcos
+#define ARRAY_LEN(arr) (sizeof(arr) / sizeof(arr[0]))
+
 #ifdef __cplusplus
 }
 #endif

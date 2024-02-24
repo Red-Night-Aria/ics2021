@@ -19,6 +19,7 @@ typedef struct {
 typedef struct {
   union {
     struct {
+      // 110001111100 00001 000 00001 11001 11
       uint32_t opcode1_0 : 2;
       uint32_t opcode6_2 : 5;
       uint32_t rd        : 5;
